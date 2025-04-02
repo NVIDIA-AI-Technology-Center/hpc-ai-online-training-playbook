@@ -1,6 +1,6 @@
 # NVAITC Playbook for HPC-AI online training approaches
 
-Online deep learning training and inference are terms used to describe an approach where a numerical HPC simulation and DL training/inference processes are tightly coupled. This NVAITC playbook demonstrates how the perform online deep learning training and inference in an HPC numerical simulation application using NVIDIA's TorchFort library. 
+Online deep learning training and inference are terms used to describe an approach where a numerical HPC simulation and DL training/inference processes are tightly coupled. This NVAITC playbook demonstrates how to perform online deep learning training and inference in an HPC numerical simulation application using NVIDIA's TorchFort library. 
 
 ## Getting started
 
