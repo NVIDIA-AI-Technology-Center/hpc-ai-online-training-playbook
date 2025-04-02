@@ -1,0 +1,47 @@
+&dns
+ng(1:3) = 128, 144, 102
+l(1:3) = 6.283185307179586, 3.141592653589793, 2.
+gtype = 1, gr = 0.
+cfl = 0.95, dtmin = 1.e5
+visci = 2820.
+inivel = 'poi'
+is_wallturb = T
+nstep = 100000000, time_max = 5100., tw_max = 0.1
+stop_type(1:3) = T, F, F
+restart = T, is_overwrite_save = T, nsaves_max = 0
+icheck = 100, iout0d = 100000000, iout1d = 100000000, iout2d = 100000000, iout3d = 100000000, isave = 100000000
+cbcvel(0:1,1:3,1) = 'P','P',  'P','P',  'D','D'
+cbcvel(0:1,1:3,2) = 'P','P',  'P','P',  'D','D'
+cbcvel(0:1,1:3,3) = 'P','P',  'P','P',  'D','D'
+cbcpre(0:1,1:3)   = 'P','P',  'P','P',  'N','N'
+bcvel(0:1,1:3,1) =  0.,0.,   0.,0.,   0.,0.
+bcvel(0:1,1:3,2) =  0.,0.,   0.,0.,   0.,0.
+bcvel(0:1,1:3,3) =  0.,0.,   0.,0.,   0.,0.
+bcpre(0:1,1:3)   =  0.,0.,   0.,0.,   0.,0.
+bforce(1:3) = 1., 0., 0.
+is_forced(1:3) = T, F, F
+velf(1:3) = 1., 0., 0.
+dims(1:2) = 1, 1
+\
+
+&cudecomp
+cudecomp_t_comm_backend = 1, cudecomp_is_t_enable_nccl = T, cudecomp_is_t_enable_nvshmem = T
+cudecomp_h_comm_backend = 1, cudecomp_is_h_enable_nccl = T, cudecomp_is_h_enable_nvshmem = T
+\
+
+&torchfort
+model_name = 'fcn'
+model_config_file = 'config_jit.yaml'
+yplus = 15
+twarmup = 1000.
+tmean = 4000.
+dtsample = 5.08
+trainbs = 32
+nsamples_train = 3200
+nsamples_val = 320
+ic_noise = F
+ic_noise_seed = 1337
+torchfort_load_ckpt = F
+torchfort_ckpt = 'torchfort_checkpoint_0060000'
+test_inference = F
+\
