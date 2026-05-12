@@ -94,23 +94,22 @@ class FCN(nn.Module):
         
         return out
 
-# script model:
-#device = torch.device("cuda:0")
+# initialize the model
 device = torch.device("cpu")
-model = FCN(3, 3, skip=False).to(device)
+model = FCN(in_channels=TODO, out_channels=TODO, skip=False).to(device)
 
-# we need to initialize the model:
+# initialize weights:
 weight_init(model)
-
-jmodel = torch.jit.script(model)
-
-inp = torch.ones((1, 3, 125, 141), dtype=torch.float32, device=device)
-out = jmodel(inp)
-
-# printing
 print(model)
+
+# TorchScript the model
+jmodel = TODO(model)
+
+# check the output shape
+inp = torch.ones((1, TODO, 125, 141), dtype=torch.float32, device=device)
+out = jmodel(inp)
 print(out.shape)
 
-# save model
-torch.jit.save(jmodel, "./files/python_model/cans_fcn.pt") 
+# save the model
+TODO(jmodel, "cans_fcn.pt") 
 

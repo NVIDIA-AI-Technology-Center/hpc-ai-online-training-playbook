@@ -6,7 +6,7 @@ cfl = 0.95, dtmin = 1.e5
 visci = 2820.
 inivel = 'poi'
 is_wallturb = T
-nstep = 100000000, time_max = 5100., tw_max = 0.1
+nstep = 100000000, time_max = 6200., tw_max = 0.1
 stop_type(1:3) = T, F, F
 restart = T, is_overwrite_save = T, nsaves_max = 0
 icheck = 100, iout0d = 100000000, iout1d = 100000000, iout2d = 100000000, iout3d = 100000000, isave = 100000000
@@ -34,11 +34,11 @@ model_name = 'fcn'
 model_config_file = 'config_jit.yaml'
 yplus = 15
 twarmup = 1000.
-tmean = 4000.
+tmean = 3000.
 dtsample = 5.08
 trainbs = 32
-nsamples_train = 3200
-nsamples_val = 320
+nsamples_train = 6400
+nsamples_val = 640
 ic_noise = F
 ic_noise_seed = 1337
 torchfort_load_ckpt = F

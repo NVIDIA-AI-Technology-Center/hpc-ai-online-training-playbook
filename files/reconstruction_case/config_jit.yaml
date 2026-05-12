@@ -4,13 +4,13 @@ general:
 model:
   type: torchscript
   parameters:
-    filename: cans_fcn.pt
+    filename: TODO
 loss:
-  type: MSE
+  type: TODO
 optimizer:
-  type: adam
+  type: TODO
   parameters:
-    learning_rate: 1e-3
+    learning_rate: TODO
     beta1: 0.9
     beta2: 0.999
     weight_decay: 0

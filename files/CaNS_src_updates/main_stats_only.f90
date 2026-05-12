@@ -61,9 +61,9 @@ program cans
   use, intrinsic :: ieee_arithmetic, only: is_nan => ieee_is_nan
   use mpi
   use decomp_2d
-  TODO
+  use torchfort
 #if defined(_OPENACC)
-  TODO
+  use cudafor
 #endif
   use mod_bound          , only: boundp,bounduvw,updt_rhs_b
   use mod_chkdiv         , only: chkdiv
@@ -123,8 +123,10 @@ program cans
   implicit none
   integer , dimension(3) :: lo,hi,n,n_x_fft,n_y_fft,lo_z,hi_z,n_z
   real(rp), allocatable, dimension(:,:,:) :: u,v,w,p,pp
+  real(rp), allocatable, dimension(:,:,:,:) :: input_local, label_local
+  real(rp), allocatable, dimension(:,:,:,:) :: input, output, label
   real(rp), allocatable, dimension(:,:,:) :: tauxz, tauyz, tauzz
-  TODO 
+  real(rp) :: loss_value
   real(8), allocatable, dimension(:) :: umean, vmean, wmean
   real(8), allocatable, dimension(:) :: ustd, vstd, wstd
   real(8):: umean_inf, vmean_inf, wmean_inf
@@ -213,10 +215,14 @@ program cans
            w( 0:n(1)+1,0:n(2)+1,0:n(3)+1), &
            p( 0:n(1)+1,0:n(2)+1,0:n(3)+1), &
            pp(0:n(1)+1,0:n(2)+1,0:n(3)+1))
-
-  TODO
+  ! CHECKME: NN related stuff
+  ! do not transpose the spatial dims, not necessary. fix later
+  allocate( input_local(1:n(1), 1:n(2), 1:3, trainbs * nranks), &
+            label_local(1:n(1), 1:n(2), 1:3, trainbs * nranks))
   !$acc enter data create(input_local, label_local)
-  TODO
+  allocate( input(1:ng(1), 1:ng(2), 1:3, trainbs), &
+           output(1:ng(1), 1:ng(2), 1:3, trainbs), &
+            label(1:ng(1), 1:ng(2), 1:3, trainbs))
   !$acc enter data create(input, output, label)
   allocate(tauxz(1:n(1), 1:n(2), 0:1), &
            tauyz(1:n(1), 1:n(2), 0:1), &
@@ -265,27 +271,9 @@ program cans
            rhsbz(  n(1),n(2),0:1))
 #endif
 
-  ! torchfort: create model
-#if defined(_OPENACC)
-  istat = cudaGetDevice(dev)
-  if (nranks == 1) then
-    istat = TODO
-  else
-    istat = TODO
-  endif
-  if (istat /= TORCHFORT_RESULT_SUCCESS) stop
-#else
-  if (nranks == 1) then
-    istat = TODO
-  else
-    istat = TODO
-  endif
-  if (istat /= TORCHFORT_RESULT_SUCCESS) stop
-#endif
-
   if (torchfort_load_ckpt) then
     if (myid == 0) print*, "Loading torchfort checkpoint", torchfort_ckpt
-    istat = TODO
+    istat = torchfort_load_checkpoint(model_name, torchfort_ckpt, isteptrain, istepval)
     if (istat /= TORCHFORT_RESULT_SUCCESS) stop
     if (myid == 0) print*, "isteptrain", isteptrain, "istepval", istepval
   else
@@ -671,7 +659,7 @@ program cans
              call distribute_batches(input_local, input, n, ng)
 
              !$acc host_data use_device(input, output)
-             istat = TODO
+             istat = torchfort_inference(model_name, input, output)
              !$acc end host_data
              if (istat /= TORCHFORT_RESULT_SUCCESS) stop
 
@@ -869,7 +857,7 @@ program cans
            if (.not. is_validating) then
              isteptrain = isteptrain + 1
              !$acc host_data use_device(input, label)
-             istat = TODO 
+             istat = torchfort_train(model_name, input, label, loss_value)
              !$acc end host_data
              if (istat /= TORCHFORT_RESULT_SUCCESS) stop
 
@@ -885,7 +873,7 @@ program cans
            else
              istepval = istepval + 1
              !$acc host_data use_device(input, output)
-             istat = TODO
+             istat = torchfort_inference(model_name, input, output)
              !$acc end host_data
              if (istat /= TORCHFORT_RESULT_SUCCESS) stop
              ! TODO: validation loss by component here
@@ -928,7 +916,7 @@ program cans
                  write(trainckptnum,'(i7.7)') isteptrain
                  filename = 'torchfort_checkpoint_'//trainckptnum
                  print "(a20,i10,a12,a100)", "Writing checkpoint ", isteptrain, " directory = ", filename
-                 istat = TODO
+                 istat = torchfort_save_checkpoint(model_name, filename)
                  if (istat /= TORCHFORT_RESULT_SUCCESS) stop
                endif
 
