@@ -61,9 +61,9 @@ program cans
   use, intrinsic :: ieee_arithmetic, only: is_nan => ieee_is_nan
   use mpi
   use decomp_2d
-  TODO
+  TODO1
 #if defined(_OPENACC)
-  TODO
+  TODO2
 #endif
   use mod_bound          , only: boundp,bounduvw,updt_rhs_b
   use mod_chkdiv         , only: chkdiv
@@ -124,7 +124,9 @@ program cans
   integer , dimension(3) :: lo,hi,n,n_x_fft,n_y_fft,lo_z,hi_z,n_z
   real(rp), allocatable, dimension(:,:,:) :: u,v,w,p,pp
   real(rp), allocatable, dimension(:,:,:) :: tauxz, tauyz, tauzz
-  TODO 
+  TODO3
+  TODO4
+  TODO5
   real(8), allocatable, dimension(:) :: umean, vmean, wmean
   real(8), allocatable, dimension(:) :: ustd, vstd, wstd
   real(8):: umean_inf, vmean_inf, wmean_inf
@@ -214,9 +216,9 @@ program cans
            p( 0:n(1)+1,0:n(2)+1,0:n(3)+1), &
            pp(0:n(1)+1,0:n(2)+1,0:n(3)+1))
 
-  TODO
+  TODO6
   !$acc enter data create(input_local, label_local)
-  TODO
+  TODO7
   !$acc enter data create(input, output, label)
   allocate(tauxz(1:n(1), 1:n(2), 0:1), &
            tauyz(1:n(1), 1:n(2), 0:1), &
@@ -269,23 +271,23 @@ program cans
 #if defined(_OPENACC)
   istat = cudaGetDevice(dev)
   if (nranks == 1) then
-    istat = TODO
+    istat = TODO8
   else
-    istat = TODO
+    istat = TODO9
   endif
   if (istat /= TORCHFORT_RESULT_SUCCESS) stop
 #else
   if (nranks == 1) then
-    istat = TODO
+    istat = TODO10
   else
-    istat = TODO
+    istat = TODO11
   endif
   if (istat /= TORCHFORT_RESULT_SUCCESS) stop
 #endif
 
   if (torchfort_load_ckpt) then
     if (myid == 0) print*, "Loading torchfort checkpoint", torchfort_ckpt
-    istat = TODO
+    istat = TODO12
     if (istat /= TORCHFORT_RESULT_SUCCESS) stop
     if (myid == 0) print*, "isteptrain", isteptrain, "istepval", istepval
   else
@@ -671,7 +673,7 @@ program cans
              call distribute_batches(input_local, input, n, ng)
 
              !$acc host_data use_device(input, output)
-             istat = TODO
+             istat = TODO14
              !$acc end host_data
              if (istat /= TORCHFORT_RESULT_SUCCESS) stop
 
@@ -869,7 +871,7 @@ program cans
            if (.not. is_validating) then
              isteptrain = isteptrain + 1
              !$acc host_data use_device(input, label)
-             istat = TODO 
+             istat = TODO13 
              !$acc end host_data
              if (istat /= TORCHFORT_RESULT_SUCCESS) stop
 
@@ -885,10 +887,9 @@ program cans
            else
              istepval = istepval + 1
              !$acc host_data use_device(input, output)
-             istat = TODO
+             istat = TODO15
              !$acc end host_data
              if (istat /= TORCHFORT_RESULT_SUCCESS) stop
-             ! TODO: validation loss by component here
              !$acc kernels default(present)
              uerr = sum((label(1:ng(1),1:ng(2),1,:) - output(1:ng(1),1:ng(2),1,:))**2)/(trainbs * ng(1) * ng(2))
              verr = sum((label(1:ng(1),1:ng(2),2,:) - output(1:ng(1),1:ng(2),2,:))**2)/(trainbs * ng(1) * ng(2))
@@ -928,7 +929,7 @@ program cans
                  write(trainckptnum,'(i7.7)') isteptrain
                  filename = 'torchfort_checkpoint_'//trainckptnum
                  print "(a20,i10,a12,a100)", "Writing checkpoint ", isteptrain, " directory = ", filename
-                 istat = TODO
+                 istat = TODO16
                  if (istat /= TORCHFORT_RESULT_SUCCESS) stop
                endif
 
