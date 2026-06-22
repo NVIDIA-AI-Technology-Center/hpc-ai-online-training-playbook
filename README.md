@@ -2,18 +2,9 @@
 
 Online deep learning training and inference are terms used to describe an approach where a numerical HPC simulation and DL training/inference processes are tightly coupled. This NVAITC playbook demonstrates how to perform online deep learning training and inference in an HPC numerical simulation application using NVIDIA's TorchFort library. 
 
-## Getting started
+## ISC Getting started
 
-We provide the playbook in two formats:
-1. playbook_docker.ipynb is meant to be run interactively on a system which contains docker and jupyter-lab.
-Simply start jupyter lab in the working directory as
-```
-jupyter-lab --port <port> 
-```
-and copy the URL to your browser to get started.
-
-2. playbook_apptainer.md is meant to demonstrate the workflow on a supercomputer equipped with Slurm and Apptainer.
-The specified commands should be executed in the (login node) terminal or copy-pasted to a slurm jobscript that is submitted for execution with 'sbatch jobscript.sh'
+Join Brev tutorial group via this [link](https://brev.nvidia.com/invite?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHBpcmF0aW9uIjoxNzgyMzA2NTMxLCJvcmdJZCI6Im9yZy0zRGE1M2dXZVpKNXh6azRqU2NwSkRXak1langiLCJ1c2VySWQiOiJ1c2VyLTNCN20ya1hnQVN6RzJnb1IzejVqZXUzUFVYTyJ9.HVJdGMRqTNQR_6G78-fm3vZSTYT_SVOjKzVrd59-jH4&orgID=org-3Da53gWeZJ5xzk4jScpJDWjMejx)
 
 ## Acknowledgements
 TorchFort and the basis of the reconstruction case have been developed by Josh Romero and Thorsten Kurth.
