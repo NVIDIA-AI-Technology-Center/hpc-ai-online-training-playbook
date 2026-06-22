@@ -6,5 +6,7 @@ Online deep learning training and inference are terms used to describe an approa
 
 Join Brev tutorial group via this [link](https://brev.nvidia.com/invite?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHBpcmF0aW9uIjoxNzgyMzA2NTMxLCJvcmdJZCI6Im9yZy0zRGE1M2dXZVpKNXh6azRqU2NwSkRXak1langiLCJ1c2VySWQiOiJ1c2VyLTNCN20ya1hnQVN6RzJnb1IzejVqZXUzUFVYTyJ9.HVJdGMRqTNQR_6G78-fm3vZSTYT_SVOjKzVrd59-jH4&orgID=org-3Da53gWeZJ5xzk4jScpJDWjMejx)
 
+To install Brev CLI follow the instructions [here](https://docs.nvidia.com/brev/getting-started/quickstart)
+
 ## Acknowledgements
 TorchFort and the basis of the reconstruction case have been developed by Josh Romero and Thorsten Kurth.
